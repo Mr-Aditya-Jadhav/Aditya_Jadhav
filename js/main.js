@@ -274,11 +274,11 @@ function initTypewriter() {
   if (!el) return;
 
   const roles = [
-   'Java Software Developer'
-     'Global xOTA Enginner',
     'Platform & Backend Engineer',
     'AI / LLM Integration Engineer',
     'Cloud-Native Developer · AWS',
+    'GLobal xOTA Developer',
+    'Java Developer'
   ];
 
   let ri = 0, ci = 0, deleting = false;

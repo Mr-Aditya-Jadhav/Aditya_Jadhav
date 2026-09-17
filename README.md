@@ -2,21 +2,6 @@
 
 Premium personal portfolio website for a  Software & AI Engineer.
 
-## 🚀 Live on GitHub Pages
-
-Push to `main` → GitHub Pages serves `index.html` from the repo root.
-
-**Steps to deploy:**
-```bash
-git add .
-git commit -m "feat: add portfolio website"
-git push origin main
-```
-
-Then go to **Settings → Pages → Source → Deploy from branch → main / (root)** and save.
-
-Your site will be live at:
-`https://<your-github-username>.github.io/<repo-name>/`
 
 ## 📁 Structure
 
@@ -63,9 +48,4 @@ My_site/
 - **Font Body:** Inter
 - **Font Mono:** JetBrains Mono
 
-## 📧 Contact Form
 
-Currently simulates a send (2 s delay). To make it real, replace the `await new Promise(…)` block in `js/main.js → initContactForm()` with a call to:
-- [Formspree](https://formspree.io) — free tier, 50 submissions/month
-- [EmailJS](https://www.emailjs.com) — free tier, 200 emails/month
-- Your own API endpoint

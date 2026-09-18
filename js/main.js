@@ -274,11 +274,11 @@ function initTypewriter() {
   if (!el) return;
 
   const roles = [
-    'Java Software Developer',
-    'Global xOTA Developer',
     'Platform & Backend Engineer',
     'AI / LLM Integration Engineer',
-    'Cloud-Native Developer · AWS' 
+    'Cloud-Native Developer · AWS',
+    'GLobal xOTA Developer',
+    'Java Developer'
   ];
 
   let ri = 0, ci = 0, deleting = false;
@@ -486,8 +486,27 @@ function initContactForm() {
     btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Sending…';
     btn.disabled = true;
 
-    // Simulate send (replace with a real endpoint / Formspree / EmailJS)
-    await new Promise(r => setTimeout(r, 1800));
+    try {
+      const data = Object.fromEntries(new FormData(form));
+      const res = await fetch('https://misty-recipe-445a.protonicreverseengine.workers.dev', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) {
+        const text = await res.text().catch(() => res.status);
+        throw new Error(`${res.status}: ${text}`);
+      }
+    } catch (err) {
+      console.error('Contact form error:', err);
+      if (status) {
+        status.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> Failed to send. Please try again.`;
+        status.classList.add('show');
+      }
+      btn.innerHTML = orig;
+      btn.disabled = false;
+      return;
+    }
 
     if (status) {
       status.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Message sent! I'll get back to you within 24 hours.`;

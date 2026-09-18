@@ -2,7 +2,6 @@
 
 Premium personal portfolio website for a  Software & AI Engineer.
 
-
 ## 📁 Structure
 
 ```
@@ -47,5 +46,4 @@ My_site/
 - **Font Display:** Sora
 - **Font Body:** Inter
 - **Font Mono:** JetBrains Mono
-
 

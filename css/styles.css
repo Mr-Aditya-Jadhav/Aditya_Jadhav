@@ -848,8 +848,8 @@ section { position: relative; }
 
 .about-facts {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
   margin-top: 34px;
 }
 .fact {

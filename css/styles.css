@@ -846,6 +846,8 @@ section { position: relative; }
   color: var(--text);
 }
 
+
+
 .about-facts {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

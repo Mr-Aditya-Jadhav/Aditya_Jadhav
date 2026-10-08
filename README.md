@@ -1,6 +1,6 @@
 # Aditya Nivrutti Jadhav — Portfolio
 
-Premium personal portfolio website for a  Software & AI Engineer
+Premium personal portfolio website for a Java Developer and backend engineer focused on software architecture, cloud-native systems, and AI/LLM integration.
 
 ## 📁 Structure
 
@@ -12,7 +12,7 @@ My_site/
 ├── images/
 │   └── Aditya.jpeg.png     ← Your professional photo
 ├── assets/
-│   └── Aditya_Nivrutti_Jadhav_Resume.pdf
+│   └── Aditya_s_Resume ref1.pdf
 ├── manifest.json           ← PWA manifest
 ├── sw.js                   ← Service worker (offline support)
 └── .nojekyll               ← Disables Jekyll processing on GitHub Pages

@@ -1,12 +1,12 @@
 /* Service Worker — Aditya Jadhav Portfolio */
-const CACHE = 'anj-v1';
+const CACHE = 'anj-v3';
 const STATIC = [
   '/',
   '/index.html',
   '/css/styles.css',
   '/js/main.js',
   '/images/Aditya.jpeg.png',
-  '/assets/Aditya_Nivrutti_Jadhav_Resume.pdf',
+  '/assets/Aditya_s_Resume%20ref1.pdf',
 ];
 
 self.addEventListener('install', e => {
@@ -25,6 +25,20 @@ self.addEventListener('activate', e => {
 
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
+
+  if (e.request.mode === 'navigate') {
+    e.respondWith(
+      fetch(e.request)
+        .then(res => {
+          const copy = res.clone();
+          caches.open(CACHE).then(c => c.put(e.request, copy));
+          return res;
+        })
+        .catch(() => caches.match('/index.html'))
+    );
+    return;
+  }
+
   e.respondWith(
     caches.match(e.request).then(cached => {
       if (cached) return cached;

@@ -363,6 +363,8 @@ function initSkillBars() {
   bars.forEach(b => io.observe(b));
 }
 
+
+
 /* ── counters ───────────────────────────────────────────── */
 function initCounters() {
   const nums = $$('.counter .num[data-to]');

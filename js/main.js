@@ -167,7 +167,7 @@ function initNav() {
   sections.forEach(s => observer.observe(s));
 }
 
-/* ── Three.js particle field (hero bg) ─────────────────── */
+/* ── Three.js star field (hero background) ─────────────── */
 function initHeroCanvas() {
   const canvas = $('#hero-canvas');
   if (!canvas || typeof THREE === 'undefined') return;
@@ -181,70 +181,77 @@ function initHeroCanvas() {
   const camera = new THREE.PerspectiveCamera(60, W / H, 0.1, 200);
   camera.position.z = 55;
 
-  // Particles
-  const N = 2400;
-  const pos = new Float32Array(N * 3);
-  const sizes = new Float32Array(N);
-  for (let i = 0; i < N; i++) {
-    pos[i * 3] = (Math.random() - 0.5) * 200;
-    pos[i * 3 + 1] = (Math.random() - 0.5) * 160;
-    pos[i * 3 + 2] = (Math.random() - 0.5) * 100;
-    sizes[i] = Math.random() * 2.2 + 0.5;
+  const createPointField = (count, material) => {
+    const positions = new Float32Array(count * 3);
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    const field = new THREE.Points(geometry, material);
+    scene.add(field);
+    return { positions, geometry };
+  };
+
+  const backgroundCount = 620;
+  const backgroundStars = new Float32Array(backgroundCount * 3);
+  for (let i = 0; i < backgroundCount; i++) {
+    backgroundStars[i * 3] = Math.random() * 2 - 1;
+    backgroundStars[i * 3 + 1] = Math.random() * 2 - 1;
+    backgroundStars[i * 3 + 2] = Math.random() * 16 - 8;
   }
-  const geo = new THREE.BufferGeometry();
-  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-  geo.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+  const backgroundField = createPointField(
+    backgroundCount,
+    new THREE.PointsMaterial({
+      color: 0xc8e7ff,
+      size: 1.5,
+      sizeAttenuation: false,
+      transparent: true,
+      opacity: 0.62,
+      depthWrite: false,
+    })
+  );
 
-  const mat = new THREE.PointsMaterial({
-    color: 0x22d3ee,
-    size: 0.55,
-    sizeAttenuation: true,
-    transparent: true,
-    opacity: 0.7,
-    depthWrite: false,
+  const updateStarPositions = (pointerX = 0, pointerY = 0) => {
+    const halfHeight = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.position.z;
+    const halfWidth = halfHeight * camera.aspect;
+
+    for (let i = 0; i < backgroundCount; i++) {
+      const depth = (backgroundStars[i * 3 + 2] + 8) / 16;
+      const parallax = 0.025 + depth * 0.055;
+      backgroundField.positions[i * 3] =
+        backgroundStars[i * 3] * halfWidth - pointerX * halfWidth * parallax;
+      backgroundField.positions[i * 3 + 1] =
+        backgroundStars[i * 3 + 1] * halfHeight - pointerY * halfHeight * parallax;
+      backgroundField.positions[i * 3 + 2] = backgroundStars[i * 3 + 2];
+    }
+    backgroundField.geometry.attributes.position.needsUpdate = true;
+  };
+
+  updateStarPositions();
+
+  let targetX = 0, targetY = 0, pointerX = 0, pointerY = 0;
+  on(document, 'pointermove', e => {
+    if (e.pointerType === 'touch') return;
+    targetX = (e.clientX / window.innerWidth - 0.5) * 2;
+    targetY = -(e.clientY / window.innerHeight - 0.5) * 2;
   });
-
-  // Connection lines geometry (recomputed each frame for a subset)
-  const particles = new THREE.Points(geo, mat);
-  scene.add(particles);
-
-  // Subtle grid lines
-  const gridMat = new THREE.LineBasicMaterial({ color: 0x22d3ee, opacity: 0.07, transparent: true });
-  for (let i = -7; i <= 7; i++) {
-    const geoH = new THREE.BufferGeometry().setFromPoints([
-      new THREE.Vector3(-80, i * 10, -10), new THREE.Vector3(80, i * 10, -10)
-    ]);
-    const geoV = new THREE.BufferGeometry().setFromPoints([
-      new THREE.Vector3(i * 11, -60, -10), new THREE.Vector3(i * 11, 60, -10)
-    ]);
-    scene.add(new THREE.Line(geoH, gridMat));
-    scene.add(new THREE.Line(geoV, gridMat));
-  }
-
-  let mx = 0, my = 0;
-  on(document, 'mousemove', e => {
-    mx = (e.clientX / window.innerWidth - 0.5) * 2;
-    my = -(e.clientY / window.innerHeight - 0.5) * 2;
-  });
+  on(document, 'pointerleave', () => { targetX = 0; targetY = 0; });
 
   on(window, 'resize', () => {
     const w = window.innerWidth, h = window.innerHeight;
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
     renderer.setSize(w, h);
+    updateStarPositions(pointerX, pointerY);
   });
 
-  let t = 0;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    renderer.render(scene, camera);
+    return;
+  }
+
   const animate = () => {
-    t += 0.003;
-    particles.rotation.y = t * 0.12 + mx * 0.06;
-    particles.rotation.x = t * 0.06 + my * 0.04;
-    // Gentle float
-    const positions = geo.attributes.position.array;
-    for (let i = 0; i < N; i++) {
-      positions[i * 3 + 1] += Math.sin(t + i * 0.3) * 0.003;
-    }
-    geo.attributes.position.needsUpdate = true;
+    pointerX += (targetX - pointerX) * 0.035;
+    pointerY += (targetY - pointerY) * 0.035;
+    updateStarPositions(pointerX, pointerY);
     renderer.render(scene, camera);
     raf(animate);
   };
@@ -276,8 +283,8 @@ function initTypewriter() {
   const roles = [
     'Software Engineer (Java)',
     'Embedded Systems Engineer',
-    'Automotive Platform Engineer',
-    'AI/LLM Integration Specialist'
+    'Automotive OTA Engineer',
+    'AI/LLM Integration '
   ];
 
   let ri = 0, ci = 0, deleting = false;

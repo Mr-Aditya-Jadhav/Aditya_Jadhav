@@ -143,8 +143,8 @@ function initNav() {
     document.body.style.overflow = open ? 'hidden' : '';
   });
 
-  // Close drawer on link click
-  $$('#drawer nav a').forEach(a => {
+  // Close drawer on any link click (nav items, CTAs and socials)
+  $$('#drawer a').forEach(a => {
     on(a, 'click', () => {
       drawer.classList.remove('open');
       document.body.style.overflow = '';
@@ -281,10 +281,11 @@ function initTypewriter() {
   if (!el) return;
 
   const roles = [
-    'Software Engineer (Java)',
-    'Embedded Systems Engineer',
-    'Automotive OTA Engineer',
-    'AI/LLM Integration '
+    'Java Software Engineer',
+    'xOTA & UDS (ISO 14229)',
+    'Embedded Java Engineer',
+    'AWS Solutions Architect',
+    'AI/LLM Integration'
   ];
 
   let ri = 0, ci = 0, deleting = false;

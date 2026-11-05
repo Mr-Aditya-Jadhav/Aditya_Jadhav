@@ -1,12 +1,11 @@
 /* Service Worker — Aditya Jadhav Portfolio */
-const CACHE = 'anj-v3';
+const CACHE = 'anj-v4';
 const STATIC = [
   '/',
   '/index.html',
   '/css/styles.css',
   '/js/main.js',
   '/images/Aditya.jpeg.png',
-  '/assets/Aditya_s_Resume%20ref1.pdf',
 ];
 
 self.addEventListener('install', e => {

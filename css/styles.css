@@ -399,6 +399,10 @@ section { position: relative; }
 [data-theme="light"] #theme-toggle .ico-sun { display: block; }
 [data-theme="light"] #theme-toggle .ico-moon { display: none; }
 
+/* social icon links in the header */
+.nav-social svg { width: 17px; height: 17px; }
+.nav-social:hover { color: var(--c2); border-color: var(--c2); }
+
 #nav-toggle { display: none; }
 
 /* ---------- 7. Buttons ---------- */
@@ -2003,6 +2007,8 @@ section { position: relative; }
   .brand small { font-size: 0.52rem; letter-spacing: 0.1em; }
   .nav-actions { gap: 6px; }
   .nav-actions > .btn { display: none; }
+  /* header socials would crowd the bar — they live in the drawer at this width */
+  .nav-social { display: none; }
   .section { padding-block: clamp(66px, 13vw, 90px); }
   .hero { min-height: auto; padding-bottom: 60px; }
   .hero-kicker { margin-bottom: 16px; font-size: 0.62rem; }
@@ -2066,6 +2072,33 @@ section { position: relative; }
   color: var(--text-dim);
 }
 #drawer .drawer-cta { margin-top: 22px; display: grid; gap: 10px; }
+
+#drawer .drawer-social {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+#drawer .drawer-social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text-muted);
+  font-size: 0.84rem;
+  font-weight: 500;
+  transition: color 0.25s, border-color 0.25s, background 0.25s;
+}
+#drawer .drawer-social a:hover, #drawer .drawer-social a:focus-visible {
+  color: var(--c2);
+  border-color: var(--c2);
+  background: var(--accent-soft);
+}
+#drawer .drawer-social svg { width: 16px; height: 16px; }
 
 @media print {
   .nav, #preloader, #to-top, #hero-canvas, .marquee, #drawer, .scroll-hint { display: none !important; }
